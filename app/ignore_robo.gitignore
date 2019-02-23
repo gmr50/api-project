@@ -1,3 +1,5 @@
 #place files here to be ignored 
 
 api_key.env
+
+api_key_new.env
