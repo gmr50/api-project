@@ -68,6 +68,7 @@ while True:
 
 
 		#some of the symbols listed in the digital_currency_list.csv don't work. 
+		#https://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary
 		if 'Error Message' in parsed_response:
 			raise Exception
 
