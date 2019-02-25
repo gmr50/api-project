@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 import datetime
 import pandas as pd 
-
+import sys
 import csv
 
 def dollar_format(input):
@@ -58,25 +58,13 @@ request_url = request_url + str(API_KEY)
 
 # or could do
 # request_url = f"url={API_KEY}"
+#https://stackoverflow.com/questions/543309/programmatically-stop-execution-of-python-script/543375
+try:
+	response = requests.get(request_url)
+	parsed_response = json.loads(response.text)
+except:
+	sys.exit("Something went wrong with the API! Check your internet connection and try again!")
 
-
-response = requests.get(request_url)
-
-print("Status: " + str(response.status_code))
-#print("Response text: " + str())
-
-
-parsed_response = json.loads(response.text)
-
-#print(parsed_response)
-
-#parsed_response["Time Series(Daily)"]["2019-02-18"]["4. close"]
-
-dict_list = []
-
-#dict_list = parsed_response["Time Series (Digital Currency Daily)"]
-#print(dict_list)
-#print("Latest closing price is: " + response.text)
 
 
 
@@ -102,7 +90,7 @@ print("*******************************************")
 list_keys = []
 list_keys = list(parsed_response["Time Series (Digital Currency Daily)"].keys())
 
-print(len(list_keys))
+
 latest_open = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["1a. open (USD)"]
 latest_high = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["2a. high (USD)"]
 latest_low = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["3a. low (USD)"]
@@ -215,6 +203,12 @@ if(price1 > price2 and price2 > price3):
 
 if(increasing_volume == True and volume_percent_change_is_desired == True and increasing_price == True):
 	print("You should buy! The conditions have been satisified!")
+	print("This algorithm bases crypto currency buy choices off the concept of momentum")
+	print(request_symbol + " has had an increasing price and significant increase in volume of trade.")
+	print("Therefore, this currency has upward momentum and the user should buy.")
+else:
+	print("You should not buy " + request_symbol)
+	print(request_symbol + " did not fulfill the requirements to have upward momentum")
 
 
 print("*******************************************")
