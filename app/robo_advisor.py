@@ -4,16 +4,53 @@ import requests
 import os
 from dotenv import load_dotenv
 
-#KUJH9GJWRGFXNJBW"
+
+import os
+import pandas as pd 
+
+
+
 
 #getting the api key form the .env file
 #but don't want to upload .env to the repository
 API_KEY = os.environ.get("MY_API_KEY")
 load_dotenv()
 
+#https://stackoverflow.com/questions/19486369/extract-csv-file-specific-columns-to-list-in-python
+colnames = ['code', 'name']
+filename = "digital_currency_list.csv"
+data = pd.read_csv(filename,names=colnames)
 
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=GOOG&apikey="
+currency_symbols = data.code.tolist()
+currency_names = data.name.tolist()
+
+while True:
+	try:
+		print("What symbol would you like to check? Enter 'S' to see the accepted symbols!")
+		request_symbol = str(input())
+		if(request_symbol == 'S'):
+			for symbol in currency_symbols: print(" +" + symbol)
+				
+
+			raise Exception
+
+		elif(request_symbol not in currency_symbols):
+			print("Not in the accepted cryptocurrencies symbol list, please try again. ")
+			raise Exception 
+		break
+	except:
+		pass
+
+
+
+request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + request_symbol + "&apikey="
 request_url = request_url + str(API_KEY)
+
+
+
+
+
+
 
 
 # or could do
