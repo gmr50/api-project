@@ -198,56 +198,59 @@ with open('data/prices.csv', 'w') as csv_file:
     # uses fieldnames set above
 # create the csv writer object
 
-sys.exit()
-print("*******************************************")
+symbol_counter = 0
 
-print("Recommendation for " + request_symbol)
+for parsed3 in parsed_response_list:
+	print("*******************************************")
 
-#algorithm for recommendation
-volume1 = 0
-volume2 = 0
-volume3 = 0
-increasing_volume = False
-volume_percent_change = 0
-volume_percent_change_is_desired = False
-increasing_price = False
-
-
-volume1 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["5. volume"])
-volume2 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[1]]["5. volume"])
-volume3 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[2]]["5. volume"])
-
-price1 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["2a. high (USD)"])
-price2 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[1]]["2a. high (USD)"])
-price3 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[2]]["2a. high (USD)"])
+	print("Recommendation for " + request_symbol_list[symbol_counter])
+	
+	#algorithm for recommendation
+	volume1 = 0
+	volume2 = 0
+	volume3 = 0
+	increasing_volume = False
+	volume_percent_change = 0
+	volume_percent_change_is_desired = False
+	increasing_price = False
 
 
-volume_percent_change = (volume1 - volume2)/volume1
+	volume1 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[0]]["5. volume"])
+	volume2 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[1]]["5. volume"])
+	volume3 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[2]]["5. volume"])
 
-if(volume1 > volume2 and volume2 > volume3):
-	increasing_volume = True
-
-	if(volume_percent_change > .2):
-		volume_percent_change_is_desired = True
-
-
-
-if(price1 > price2 and price2 > price3):
-	increasing_price = True
+	price1 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[0]]["2a. high (USD)"])
+	price2 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[1]]["2a. high (USD)"])
+	price3 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[2]]["2a. high (USD)"])
 
 
-if(increasing_volume == True and volume_percent_change_is_desired == True and increasing_price == True):
-	print("You should buy! The conditions have been satisified!")
-	print("This algorithm bases crypto currency buy choices off the concept of momentum")
-	print(request_symbol + " has had an increasing price and significant increase in volume of trade.")
-	print("Therefore, this currency has upward momentum and the user should buy.")
-else:
-	print("You should not buy " + request_symbol)
-	print(request_symbol + " did not fulfill the requirements to have upward momentum")
+	volume_percent_change = (volume1 - volume2)/volume1
+
+	if(volume1 > volume2 and volume2 > volume3):
+		increasing_volume = True
+
+		if(volume_percent_change > .25):
+			volume_percent_change_is_desired = True
 
 
-print("*******************************************")
-print("*******************************************")
+
+	if(price1 > price2 and price2 > price3):
+		increasing_price = True
+
+
+	if(increasing_volume == True and volume_percent_change_is_desired == True and increasing_price == True):
+		print("You should buy! The conditions have been satisified!")
+		print("This algorithm bases crypto currency buy choices off the concept of momentum")
+		print(request_symbol_list[symbol_counter] + " has had an increasing price and significant increase in volume of trade.")
+		print("Therefore, this currency has upward momentum and the user should buy.")
+	else:
+		print("You should not buy " + request_symbol_list[symbol_counter])
+		print(request_symbol_list[symbol_counter] + " did not fulfill the requirements to have upward momentum")
+
+	symbol_counter = symbol_counter + 1
+
+	print("*******************************************")
+	print("*******************************************")
 
 
 
