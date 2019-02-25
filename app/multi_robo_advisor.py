@@ -33,6 +33,7 @@ print("Welcome to Graham's Robo Adivsor! This python script will help you choose
 
 parsed_response_list = []
 request_symbol_list = []
+list_keys_list = []
 counter = 0
 while counter < 3:
 	counter = counter + 1
@@ -110,7 +111,8 @@ for parsed in parsed_response_list:
 	#adapted from Prof Rossetti's solution
 
 	list_keys = []
-	list_keys = list(parsed_response["Time Series (Digital Currency Daily)"].keys())
+	list_keys = list(parsed["Time Series (Digital Currency Daily)"].keys())
+	list_keys_list.append(list_keys)
 
 
 
@@ -162,7 +164,7 @@ for parsed in parsed_response_list:
 	print("Recent High Price: " + str(recent_high_price))
 	print("Recent Low Price: " + str(recent_low_price))
 
-sys.exit()
+
 
 
 
@@ -173,21 +175,30 @@ sys.exit()
 counter = 0
 #https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/notes/python/modules/csv.md
 with open('data/prices.csv', 'w') as csv_file:
-	writer = csv.DictWriter(csv_file, fieldnames=["timestamp", "open", "high", "low", "close", "volume", "market cap"])
-	writer.writeheader() 
-	for dates in list_keys:
-		if(counter < 100):
-			counter = counter + 1
-			writer.writerow({"timestamp": dates, 
-			"open": parsed_response["Time Series (Digital Currency Daily)"][dates]["1a. open (USD)"],
-			"high": parsed_response["Time Series (Digital Currency Daily)"][dates]["2a. high (USD)"],
-			"low": parsed_response["Time Series (Digital Currency Daily)"][dates]["3a. low (USD)"],
-			"close": parsed_response["Time Series (Digital Currency Daily)"][dates]["4a. close (USD)"],
-			"volume": parsed_response["Time Series (Digital Currency Daily)"][dates]["5. volume"],
-			"market cap": parsed_response["Time Series (Digital Currency Daily)"][dates]["6. market cap (USD)"]})
+	writer = csv.DictWriter(csv_file, fieldnames=["crypto", "timestamp", "open", "high", "low", "close", "volume", "market cap"])
+	writer.writeheader()
+	symbol_counter = 0
 
+	for parsed2 in parsed_response_list:
+		writer.writerow({"crypto": request_symbol_list[symbol_counter]})
+		symbol_counter = symbol_counter + 1
+		for lists in list_keys_list:
+			for dates in lists:
+
+				if(counter < 100):
+					counter = counter + 1
+					writer.writerow({"timestamp": dates, 
+					"open": parsed2["Time Series (Digital Currency Daily)"][dates]["1a. open (USD)"],
+					"high": parsed2["Time Series (Digital Currency Daily)"][dates]["2a. high (USD)"],
+					"low": parsed2["Time Series (Digital Currency Daily)"][dates]["3a. low (USD)"],
+					"close": parsed2["Time Series (Digital Currency Daily)"][dates]["4a. close (USD)"],
+					"volume": parsed2["Time Series (Digital Currency Daily)"][dates]["5. volume"],
+					"market cap": parsed2["Time Series (Digital Currency Daily)"][dates]["6. market cap (USD)"]})
+		counter = 0
     # uses fieldnames set above
 # create the csv writer object
+
+sys.exit()
 print("*******************************************")
 
 print("Recommendation for " + request_symbol)
