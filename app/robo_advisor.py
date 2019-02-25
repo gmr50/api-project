@@ -176,16 +176,52 @@ with open('data/prices.csv', 'w') as csv_file:
 
     # uses fieldnames set above
 # create the csv writer object
+print("*******************************************")
+
+print("Recommendation for " + request_symbol)
+
+#algorithm for recommendation
+volume1 = 0
+volume2 = 0
+volume3 = 0
+increasing_volume = False
+volume_percent_change = 0
+volume_percent_change_is_desired = False
+increasing_price = False
 
 
-print("****************")
-#print(parsed_response)
-print("*****************")
+volume1 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["5. volume"])
+volume2 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[1]]["5. volume"])
+volume3 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[2]]["5. volume"])
+
+price1 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["2a. high (USD)"])
+price2 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[1]]["2a. high (USD)"])
+price3 = float(parsed_response["Time Series (Digital Currency Daily)"][list_keys[2]]["2a. high (USD)"])
+
+
+volume_percent_change = (volume1 - volume2)/volume1
+
+if(volume1 > volume2 and volume2 > volume3):
+	increasing_volume = True
+
+	if(volume_percent_change > .2):
+		volume_percent_change_is_desired = True
+
+
+
+if(price1 > price2 and price2 > price3):
+	increasing_price = True
+
+
+if(increasing_volume == True and volume_percent_change_is_desired == True and increasing_price == True):
+	print("You should buy! The conditions have been satisified!")
+
+
+print("*******************************************")
+print("*******************************************")
 #csvwriter = csv.writer(parsed_response)
 
 
-
-count = 0
 
 #for parsed in parsed_response:
 
