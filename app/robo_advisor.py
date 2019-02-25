@@ -102,7 +102,7 @@ print("*******************************************")
 list_keys = []
 list_keys = list(parsed_response["Time Series (Digital Currency Daily)"].keys())
 
-
+print(len(list_keys))
 latest_open = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["1a. open (USD)"]
 latest_high = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["2a. high (USD)"]
 latest_low = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["3a. low (USD)"]
@@ -119,12 +119,36 @@ latest_market_cap = dollar_format(float(latest_market_cap))
 #https://stackoverflow.com/questions/455612/limiting-floats-to-two-decimal-points
 latest_volume = "{0:.2f}".format(float(latest_volume))
 
+
+high_price_list = []
+low_price_list = []
+
+counter = 0
+for dates in list_keys:
+	if(counter < 100):
+		high_price_list.append(parsed_response["Time Series (Digital Currency Daily)"][dates]["2a. high (USD)"])
+		low_price_list.append(parsed_response["Time Series (Digital Currency Daily)"][dates]["3a. low (USD)"])
+		counter = counter+1
+		print(counter)
+
+recent_high_price = max(high_price_list)
+recent_high_price = dollar_format(float(recent_high_price))
+
+recent_low_price = min(low_price_list)
+recent_low_price = dollar_format(float(recent_low_price))
+
+
+
+
+
 print("Latest Open: " + str(latest_open))
 print("Latest High: " + str(latest_high))
 print("Latest Low: " + str(latest_low))
 print("Latest Close: " + str(latest_close))
 print("Latest Volume: " + str(latest_volume))
 print("Latest Market Cap: " + latest_market_cap)
+print("Recent High Price: " + str(recent_high_price))
+print("Recent Low Price: " + str(recent_low_price))
 
 
 
