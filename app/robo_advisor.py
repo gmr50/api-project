@@ -8,7 +8,8 @@ import pandas as pd
 
 import csv
 
-
+def dollar_format(input):
+	return "${0:,.2f}".format(input)
 
 
 #getting the api key form the .env file
@@ -94,6 +95,36 @@ print("Request Sent: " + current_time)
 print("Latest Refreshed: " + parsed_response["Meta Data"]["6. Last Refreshed"])
 
 print("*******************************************")
+
+
+#adapted from Prof Rossetti's solution
+
+list_keys = []
+list_keys = list(parsed_response["Time Series (Digital Currency Daily)"].keys())
+
+
+latest_open = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["1a. open (USD)"]
+latest_high = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["2a. high (USD)"]
+latest_low = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["3a. low (USD)"]
+latest_close = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["4a. close (USD)"]
+latest_volume = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["5. volume"]
+latest_market_cap = parsed_response["Time Series (Digital Currency Daily)"][list_keys[0]]["6. market cap (USD)"]
+
+
+latest_open = dollar_format(float(latest_open))
+latest_high = dollar_format(float(latest_high))
+latest_low = dollar_format(float(latest_low))
+latest_close = dollar_format(float(latest_close))
+latest_market_cap = dollar_format(float(latest_market_cap))
+#https://stackoverflow.com/questions/455612/limiting-floats-to-two-decimal-points
+latest_volume = "{0:.2f}".format(float(latest_volume))
+
+print("Latest Open: " + str(latest_open))
+print("Latest High: " + str(latest_high))
+print("Latest Low: " + str(latest_low))
+print("Latest Close: " + str(latest_close))
+print("Latest Volume: " + str(latest_volume))
+print("Latest Market Cap: " + latest_market_cap)
 
 
 
