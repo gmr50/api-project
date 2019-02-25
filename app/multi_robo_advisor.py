@@ -41,7 +41,7 @@ while counter < 3:
 		try:
 			while True:
 				try:
-					print("What symbol would you like to check? Enter 'S' to see the accepted symbols!")
+					print("What symbol (3) would you like to check? Enter 'S' to see the accepted symbols!")
 					request_symbol = str(input())
 					#https://stackoverflow.com/questions/9257094/how-to-change-a-string-into-uppercase
 					#takes user input to upper case 
@@ -51,10 +51,13 @@ while counter < 3:
 							
 
 						raise Exception
+				
 
 					elif(request_symbol not in currency_symbols):
 						print("Not in the accepted cryptocurrencies symbol list, please try again. ")
 						raise Exception 
+
+
 					break
 				except:
 					pass
