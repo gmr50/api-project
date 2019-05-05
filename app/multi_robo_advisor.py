@@ -8,8 +8,11 @@ import pandas as pd
 import sys
 import csv
 
-def dollar_format(input):
-	return "${0:,.2f}".format(input)
+
+from robo_advisor_revisited import dollar_format, compile_url
+
+# def dollar_format(input):
+# 	return "${0:,.2f}".format(input)
 
 
 #getting the api key form the .env file
@@ -63,9 +66,9 @@ while counter < 3:
 					pass
 
 
-			request_url = "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=" + request_symbol + "&market=USD&apikey=" + "&apikey="
-			request_url = request_url + str(API_KEY)
 
+
+			request_url = compile_url(request_symbol,API_KEY)
 
 
 			#https://stackoverflow.com/questions/543309/programmatically-stop-execution-of-python-script/543375
