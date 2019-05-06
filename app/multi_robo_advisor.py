@@ -9,7 +9,7 @@ import sys
 import csv
 
 
-from robo_advisor_revisited import dollar_format, compile_url
+from robo_advisor_revisited import dollar_format, compile_url, get_response, transform_response
 
 # def dollar_format(input):
 # 	return "${0:,.2f}".format(input)
@@ -67,23 +67,10 @@ while counter < 3:
 
 
 
-
+			#revisited
 			request_url = compile_url(request_symbol,API_KEY)
-
-
-			#https://stackoverflow.com/questions/543309/programmatically-stop-execution-of-python-script/543375
-			try:
-				response = requests.get(request_url)
-				parsed_response = json.loads(response.text)
-			except:
-				sys.exit("Something went wrong with the API! Check your internet connection and try again!")
-
-
-			#some of the symbols listed in the digital_currency_list.csv don't work. 
-			#https://stackoverflow.com/questions/1602934/check-if-a-given-key-already-exists-in-a-dictionary
-			if 'Error Message' in parsed_response:
-				raise Exception
-
+			#revisited
+			parsed_response = get_response(request_url)
 
 			request_symbol_list.append(request_symbol)
 			break
@@ -122,22 +109,9 @@ for parsed in parsed_response_list:
 
 
 
-	latest_open = parsed["Time Series (Digital Currency Daily)"][list_keys[0]]["1a. open (USD)"]
-	latest_high = parsed["Time Series (Digital Currency Daily)"][list_keys[0]]["2a. high (USD)"]
-	latest_low = parsed["Time Series (Digital Currency Daily)"][list_keys[0]]["3a. low (USD)"]
-	latest_close = parsed["Time Series (Digital Currency Daily)"][list_keys[0]]["4a. close (USD)"]
-	latest_volume = parsed["Time Series (Digital Currency Daily)"][list_keys[0]]["5. volume"]
-	latest_market_cap = parsed["Time Series (Digital Currency Daily)"][list_keys[0]]["6. market cap (USD)"]
-
-
-	latest_open = dollar_format(float(latest_open))
-	latest_high = dollar_format(float(latest_high))
-	latest_low = dollar_format(float(latest_low))
-	latest_close = dollar_format(float(latest_close))
-	latest_market_cap = dollar_format(float(latest_market_cap))
-	#https://stackoverflow.com/questions/455612/limiting-floats-to-two-decimal-points
-	latest_volume = "{0:.2f}".format(float(latest_volume))
-
+	#revisited
+	#gets the requested data
+	data_response = transform_response(list_keys, parsed)
 
 	high_price_list = []
 	low_price_list = []
@@ -161,12 +135,12 @@ for parsed in parsed_response_list:
 
 
 
-	print("Latest Open: " + str(latest_open))
-	print("Latest High: " + str(latest_high))
-	print("Latest Low: " + str(latest_low))
-	print("Latest Close: " + str(latest_close))
-	print("Latest Volume: " + str(latest_volume))
-	print("Latest Market Cap: " + latest_market_cap)
+	print("Latest Open: " + data_response['open'][0])
+	print("Latest High: " + data_response['high'][0])
+	print("Latest Low: " + data_response['low'][0])
+	print("Latest Close: " + data_response['close'][0])
+	print("Latest Volume: " + data_response['volume'][0])
+	print("Latest Market Cap: " + data_response['market_cap'][0])
 	print("Recent High Price: " + str(recent_high_price))
 	print("Recent Low Price: " + str(recent_low_price))
 
