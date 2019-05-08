@@ -12,10 +12,12 @@ def dollar_format(input):
 	return "${0:,.2f}".format(input)
 
 
+
+try:
 #getting the api key form the .env file
 #but don't want to upload .env to the repository
-API_KEY = os.environ.get("MY_API_KEY")
 load_dotenv()
+API_KEY = os.environ.get("API_KEY")
 
 #https://stackoverflow.com/questions/19486369/extract-csv-file-specific-columns-to-list-in-python
 colnames = ['code', 'name']

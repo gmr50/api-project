@@ -15,8 +15,12 @@ from robo_advisor_revisited import dollar_format, compile_url, get_response, tra
 
 #getting the api key form the .env file
 #but don't want to upload .env to the repository
-API_KEY = os.environ.get("MY_API_KEY")
 load_dotenv()
+API_KEY = os.environ.get("API_KEY")
+
+
+#print(API_KEY)
+
 
 #https://stackoverflow.com/questions/19486369/extract-csv-file-specific-columns-to-list-in-python
 colnames = ['code', 'name']
@@ -71,6 +75,7 @@ while counter < 3:
 
 			#revisited
 			request_url = compile_url(request_symbol,API_KEY)
+			print(request_url)
 			#revisited
 			parsed_response = get_response(request_url)
 
@@ -202,7 +207,8 @@ for i in range(3):
 
 	if(price1 > price2 and price2 > price3):
 		increasing_price = True
-
+	print("")
+	print("")
 
 	if(increasing_volume == True and volume_percent_change_is_desired == True and increasing_price == True):
 		print("You should buy! The conditions have been satisified!")
