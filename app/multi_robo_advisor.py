@@ -7,9 +7,9 @@ import datetime
 import pandas as pd 
 import sys
 import csv
+import pprint
 
-
-from robo_advisor_revisited import dollar_format, compile_url, get_response, transform_response
+from robo_advisor_revisited import dollar_format, compile_url, get_response, transform_response, write_to_csv
 
 # def dollar_format(input):
 # 	return "${0:,.2f}".format(input)
@@ -38,6 +38,11 @@ parsed_response_list = []
 request_symbol_list = []
 list_keys_list = []
 counter = 0
+
+data_response_frame = pd.DataFrame()
+data_response_dict = {'1':{},'2':{},'3':{}}
+
+
 while counter < 3:
 	counter = counter + 1
 	while True:
@@ -112,17 +117,28 @@ for parsed in parsed_response_list:
 	#revisited
 	#gets the requested data
 	data_response = transform_response(list_keys, parsed)
+	#print(data_response)
+	data_response1 = data_response.to_dict()
+	#symbol_counter = str(symbol_counter)
+	data_response_dict[symbol_counter] = data_response1
+
+	
+
 
 	high_price_list = []
 	low_price_list = []
 
 	#gets recent high and low
 	counter = 0
-	for dates in list_keys:
-		if(counter < 100):
-			high_price_list.append(parsed["Time Series (Digital Currency Daily)"][dates]["2a. high (USD)"])
-			low_price_list.append(parsed["Time Series (Digital Currency Daily)"][dates]["3a. low (USD)"])
-			counter = counter+1
+	for item in data_response_dict[symbol_counter]['high'].items():
+		#need to convert back from dollar format
+		value = item[1]
+		high_price_list.append(value)
+	for item in data_response_dict[symbol_counter]['low'].items():
+		value = item[1]
+		low_price_list.append(value)
+
+			
 
 
 	recent_high_price = max(high_price_list)
@@ -135,18 +151,20 @@ for parsed in parsed_response_list:
 
 
 
-	print("Latest Open: " + data_response['open'][0])
-	print("Latest High: " + data_response['high'][0])
-	print("Latest Low: " + data_response['low'][0])
-	print("Latest Close: " + data_response['close'][0])
-	print("Latest Volume: " + data_response['volume'][0])
-	print("Latest Market Cap: " + data_response['market_cap'][0])
+	print("Latest Open: " + dollar_format(float(data_response_dict[symbol_counter]['open'][0])))
+	print("Latest High: " + dollar_format(float(data_response_dict[symbol_counter]['high'][0])))
+	print("Latest Low: " + dollar_format(float(data_response_dict[symbol_counter]['low'][0])))
+	print("Latest Close: " + dollar_format(float(data_response_dict[symbol_counter]['close'][0])))
+	print("Latest Volume: " + ("{0:,.2f}".format(float(data_response_dict[symbol_counter]['volume'][0]))))
+	print("Latest Market Cap: " + ("{0:,.2f}".format(float(data_response_dict[symbol_counter]['market_cap'][0]))))
 	print("Recent High Price: " + str(recent_high_price))
 	print("Recent Low Price: " + str(recent_low_price))
 
+	
 
-
-
+#print("frame")
+#pprint.pprint(data_response_dict)
+#write_to_csv(data_response)
 
 
 	#http://blog.appliedinformaticsinc.com/how-to-parse-and-convert-json-to-csv-using-python/
@@ -179,6 +197,70 @@ with open('data/prices.csv', 'w') as csv_file:
 # create the csv writer object
 
 symbol_counter = 0
+
+
+dict_counter = 1
+
+#pprint.pprint(data_response_dict)
+
+iterator = 1
+for i in range(3):
+
+		#algorithm for recommendation
+	volume1 = 0
+	volume2 = 0
+	volume3 = 0
+	increasing_volume = False
+	volume_percent_change = 0
+	volume_percent_change_is_desired = False
+	increasing_price = False
+
+
+
+
+	volume1 = data_response_dict[iterator]['volume'][0]
+	volume2 = data_response_dict[iterator]['volume'][1]
+	volume3 = data_response_dict[iterator]['volume'][2]
+
+	price1 = data_response_dict[iterator]['high'][0]
+	price2 = data_response_dict[iterator]['high'][1]
+	price3 = data_response_dict[iterator]['high'][2]
+
+	iterator = iterator +1
+
+
+
+	volume_percent_change = (volume1 - volume2)/volume1
+
+	if(volume1 > volume2 and volume2 > volume3):
+		increasing_volume = True
+
+		if(volume_percent_change > .25):
+			volume_percent_change_is_desired = True
+
+
+
+	if(price1 > price2 and price2 > price3):
+		increasing_price = True
+
+
+	if(increasing_volume == True and volume_percent_change_is_desired == True and increasing_price == True):
+		print("You should buy! The conditions have been satisified!")
+		print("This algorithm bases crypto currency buy choices off the concept of momentum")
+		print(request_symbol_list[symbol_counter] + " has had an increasing price and significant increase in volume of trade.")
+		print("Therefore, this currency has upward momentum and the user should buy.")
+	else:
+		print("You should not buy " + request_symbol_list[symbol_counter])
+		print(request_symbol_list[symbol_counter] + " did not fulfill the requirements to have upward momentum")
+
+	symbol_counter = symbol_counter + 1
+
+	print("*******************************************")
+	print("*******************************************")
+
+sys.exit("testing exit!")
+
+
 
 for parsed3 in parsed_response_list:
 	print("*******************************************")

@@ -70,28 +70,30 @@ def transform_response(list_keys, parsed):
 			break
 		else:
 			latest_open = parsed["Time Series (Digital Currency Daily)"][dates]["1a. open (USD)"]
-			latest_open = dollar_format(float(latest_open))
+			#latest_open = dollar_format(float(latest_open))
 			latest_open_list.append(latest_open)
 
 
 			latest_high = parsed["Time Series (Digital Currency Daily)"][dates]["2a. high (USD)"]
-			latest_high = dollar_format(float(latest_high))
+			#latest_high = dollar_format(float(latest_high))
 			high_list.append(latest_high)
 
 			latest_low = parsed["Time Series (Digital Currency Daily)"][dates]["3a. low (USD)"]
-			latest_low = dollar_format(float(latest_low))
+			#latest_low = dollar_format(float(latest_low))
 			low_list.append(latest_low)
 
 			latest_close = parsed["Time Series (Digital Currency Daily)"][dates]["4a. close (USD)"]
-			latest_close = dollar_format(float(latest_close))
+			#latest_close = dollar_format(float(latest_close))
 			close_list.append(latest_close)
 
 			latest_volume = parsed["Time Series (Digital Currency Daily)"][dates]["5. volume"]
-			latest_volume = "{0:.2f}".format(float(latest_volume))
+			latest_volume = float(latest_volume)
+			#latest_volume = "{0:,.2f}".format(float(latest_volume))
 			volume_list.append(latest_volume)
 
 			latest_market_cap = parsed["Time Series (Digital Currency Daily)"][dates]["6. market cap (USD)"]
-			latest_market_cap = dollar_format(float(latest_market_cap))
+			#latest_market_cap = "{0:,.2f}".format(float(latest_market_cap))
+			latest_market_cap = float(latest_market_cap)
 			market_cap_list.append(latest_market_cap)
 
 
@@ -110,7 +112,7 @@ def transform_response(list_keys, parsed):
 
 
 
-def write_to_csv():
+def write_to_csv(response_dataframe):
 
 	counter = 0
 	#https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/notes/python/modules/csv.md
