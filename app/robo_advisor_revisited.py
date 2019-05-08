@@ -1,6 +1,8 @@
 import json
 import requests
 import pandas as pd
+import datetime
+import csv
 
 def dollar_format(input):
 
@@ -47,6 +49,7 @@ def transform_response(list_keys, parsed):
 	close_list = []
 	volume_list =[]
 	market_cap_list = []
+	date_list = []
 
 
 	# response_dataframe = pd.DataFrame(columns = ['latest_open','latest_high', 'latest_low', 'latest_close', 'latest_volume', 'latest_market_cap'])
@@ -96,6 +99,10 @@ def transform_response(list_keys, parsed):
 			latest_market_cap = float(latest_market_cap)
 			market_cap_list.append(latest_market_cap)
 
+			date_list.append(dates)
+
+
+
 
 
 
@@ -104,41 +111,54 @@ def transform_response(list_keys, parsed):
 	'low': low_list, 
 	'close': close_list, 
 	'volume': volume_list, 
-	'market_cap': market_cap_list } )
+	'market_cap': market_cap_list,
+	'date': date_list} )
+
+	response_dict = response_dataframe.to_dict()
 
 
-	return response_dataframe
+	return response_dict
 
 
 
 
-def write_to_csv(response_dataframe):
+def write_to_csv(response_dict, request_symbol_list):
 
-	counter = 0
+	
+	datestring = datetime.datetime.now().today().strftime(' %m %d %y  ')
+	datestring1 = datetime.datetime.now().time().strftime('%H %M %S')
+	filename = 'data/prices' + datestring + datestring1 + '.csv'
+
 	#https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/notes/python/modules/csv.md
-	with open('data/prices.csv', 'w') as csv_file:
+	with open(filename, 'w') as csv_file:
 		writer = csv.DictWriter(csv_file, fieldnames=["crypto", "timestamp", "open", "high", "low", "close", "volume", "market cap"])
 		writer.writeheader()
 		symbol_counter = 0
+		counter = 1
 
-		for parsed2 in parsed_response_list:
+		for i in range(3):
 			writer.writerow({"crypto": request_symbol_list[symbol_counter]})
-			symbol_counter = symbol_counter + 1
-			for lists in list_keys_list:
-				for dates in lists:
+			
 
-					if(counter < 100):
-						counter = counter + 1
-						writer.writerow({"timestamp": dates, 
-						"open": parsed2["Time Series (Digital Currency Daily)"][dates]["1a. open (USD)"],
-						"high": parsed2["Time Series (Digital Currency Daily)"][dates]["2a. high (USD)"],
-						"low": parsed2["Time Series (Digital Currency Daily)"][dates]["3a. low (USD)"],
-						"close": parsed2["Time Series (Digital Currency Daily)"][dates]["4a. close (USD)"],
-						"volume": parsed2["Time Series (Digital Currency Daily)"][dates]["5. volume"],
-						"market cap": parsed2["Time Series (Digital Currency Daily)"][dates]["6. market cap (USD)"]})
-			counter = 0
-	# uses fieldnames set above
-	# create the csv writer object
+			#gets length of dictionary
+			dictionary_length = len(response_dict[1]['open'])
+
+			for iterator in range(dictionary_length):
+				writer.writerow({
+					"timestamp": response_dict[counter]['date'][iterator],
+					"open": (dollar_format(float(response_dict[counter]['open'][iterator]))),
+					"high": (dollar_format(float(response_dict[counter]['high'][iterator]))),
+					"low": (dollar_format(float(response_dict[counter]['low'][iterator]))),
+					"close": (dollar_format(float(response_dict[counter]['close'][iterator]))),
+					"volume": ("{0:,.2f}".format(float(response_dict[counter]['volume'][iterator]))),
+					"market cap": ("{0:,.2f}".format(float(response_dict[counter]['market_cap'][iterator])))
+
+					})
+			counter = counter + 1
+			symbol_counter = symbol_counter + 1
+
+	return True
+
 
 
 

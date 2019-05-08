@@ -100,6 +100,7 @@ for parsed in parsed_response_list:
 	current_time = str(current_time)
 	print("Request Sent: " + current_time)
 
+	
 	print("Latest Refreshed: " + parsed["Meta Data"]["6. Last Refreshed"])
 
 	print("*******************************************")
@@ -118,9 +119,9 @@ for parsed in parsed_response_list:
 	#gets the requested data
 	data_response = transform_response(list_keys, parsed)
 	#print(data_response)
-	data_response1 = data_response.to_dict()
+	#data_response1 = data_response.to_dict()
 	#symbol_counter = str(symbol_counter)
-	data_response_dict[symbol_counter] = data_response1
+	data_response_dict[symbol_counter] = data_response
 
 	
 
@@ -160,7 +161,9 @@ for parsed in parsed_response_list:
 	print("Recent High Price: " + str(recent_high_price))
 	print("Recent Low Price: " + str(recent_low_price))
 
-	
+
+
+
 
 #print("frame")
 #pprint.pprint(data_response_dict)
@@ -170,43 +173,46 @@ for parsed in parsed_response_list:
 	#http://blog.appliedinformaticsinc.com/how-to-parse-and-convert-json-to-csv-using-python/
 	# open a file for writing
 
-counter = 0
-#https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/notes/python/modules/csv.md
-with open('data/prices.csv', 'w') as csv_file:
-	writer = csv.DictWriter(csv_file, fieldnames=["crypto", "timestamp", "open", "high", "low", "close", "volume", "market cap"])
-	writer.writeheader()
-	symbol_counter = 0
+# counter = 0
+# #https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/notes/python/modules/csv.md
+# with open('data/prices.csv', 'w') as csv_file:
+# 	writer = csv.DictWriter(csv_file, fieldnames=["crypto", "timestamp", "open", "high", "low", "close", "volume", "market cap"])
+# 	writer.writeheader()
+# 	symbol_counter = 0
 
-	for parsed2 in parsed_response_list:
-		writer.writerow({"crypto": request_symbol_list[symbol_counter]})
-		symbol_counter = symbol_counter + 1
-		for lists in list_keys_list:
-			for dates in lists:
+# 	for parsed2 in parsed_response_list:
+# 		writer.writerow({"crypto": request_symbol_list[symbol_counter]})
+# 		symbol_counter = symbol_counter + 1
+# 		for lists in list_keys_list:
+# 			for dates in lists:
 
-				if(counter < 100):
-					counter = counter + 1
-					writer.writerow({"timestamp": dates, 
-					"open": parsed2["Time Series (Digital Currency Daily)"][dates]["1a. open (USD)"],
-					"high": parsed2["Time Series (Digital Currency Daily)"][dates]["2a. high (USD)"],
-					"low": parsed2["Time Series (Digital Currency Daily)"][dates]["3a. low (USD)"],
-					"close": parsed2["Time Series (Digital Currency Daily)"][dates]["4a. close (USD)"],
-					"volume": parsed2["Time Series (Digital Currency Daily)"][dates]["5. volume"],
-					"market cap": parsed2["Time Series (Digital Currency Daily)"][dates]["6. market cap (USD)"]})
-		counter = 0
-    # uses fieldnames set above
-# create the csv writer object
+# 				if(counter < 100):
+# 					counter = counter + 1
+# 					writer.writerow({"timestamp": dates, 
+# 					"open": parsed2["Time Series (Digital Currency Daily)"][dates]["1a. open (USD)"],
+# 					"high": parsed2["Time Series (Digital Currency Daily)"][dates]["2a. high (USD)"],
+# 					"low": parsed2["Time Series (Digital Currency Daily)"][dates]["3a. low (USD)"],
+# 					"close": parsed2["Time Series (Digital Currency Daily)"][dates]["4a. close (USD)"],
+# 					"volume": parsed2["Time Series (Digital Currency Daily)"][dates]["5. volume"],
+# 					"market cap": parsed2["Time Series (Digital Currency Daily)"][dates]["6. market cap (USD)"]})
+# 		counter = 0
+#     # uses fieldnames set above
+# # create the csv writer object
+
+
+
+write_to_csv(data_response_dict,request_symbol_list)
+
 
 symbol_counter = 0
 
-
-dict_counter = 1
 
 #pprint.pprint(data_response_dict)
 
 iterator = 1
 for i in range(3):
 
-		#algorithm for recommendation
+	#algorithm for recommendation
 	volume1 = 0
 	volume2 = 0
 	volume3 = 0
@@ -214,7 +220,6 @@ for i in range(3):
 	volume_percent_change = 0
 	volume_percent_change_is_desired = False
 	increasing_price = False
-
 
 
 
@@ -258,61 +263,60 @@ for i in range(3):
 	print("*******************************************")
 	print("*******************************************")
 
-sys.exit("testing exit!")
 
 
 
-for parsed3 in parsed_response_list:
-	print("*******************************************")
+# for parsed3 in parsed_response_list:
+# 	print("*******************************************")
 
-	print("Recommendation for " + request_symbol_list[symbol_counter])
+# 	print("Recommendation for " + request_symbol_list[symbol_counter])
 	
-	#algorithm for recommendation
-	volume1 = 0
-	volume2 = 0
-	volume3 = 0
-	increasing_volume = False
-	volume_percent_change = 0
-	volume_percent_change_is_desired = False
-	increasing_price = False
+# 	#algorithm for recommendation
+# 	volume1 = 0
+# 	volume2 = 0
+# 	volume3 = 0
+# 	increasing_volume = False
+# 	volume_percent_change = 0
+# 	volume_percent_change_is_desired = False
+# 	increasing_price = False
 
 
-	volume1 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[0]]["5. volume"])
-	volume2 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[1]]["5. volume"])
-	volume3 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[2]]["5. volume"])
+# 	volume1 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[0]]["5. volume"])
+# 	volume2 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[1]]["5. volume"])
+# 	volume3 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[2]]["5. volume"])
 
-	price1 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[0]]["2a. high (USD)"])
-	price2 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[1]]["2a. high (USD)"])
-	price3 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[2]]["2a. high (USD)"])
-
-
-	volume_percent_change = (volume1 - volume2)/volume1
-
-	if(volume1 > volume2 and volume2 > volume3):
-		increasing_volume = True
-
-		if(volume_percent_change > .25):
-			volume_percent_change_is_desired = True
+# 	price1 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[0]]["2a. high (USD)"])
+# 	price2 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[1]]["2a. high (USD)"])
+# 	price3 = float(parsed3["Time Series (Digital Currency Daily)"][list_keys[2]]["2a. high (USD)"])
 
 
+# 	volume_percent_change = (volume1 - volume2)/volume1
 
-	if(price1 > price2 and price2 > price3):
-		increasing_price = True
+# 	if(volume1 > volume2 and volume2 > volume3):
+# 		increasing_volume = True
+
+# 		if(volume_percent_change > .25):
+# 			volume_percent_change_is_desired = True
 
 
-	if(increasing_volume == True and volume_percent_change_is_desired == True and increasing_price == True):
-		print("You should buy! The conditions have been satisified!")
-		print("This algorithm bases crypto currency buy choices off the concept of momentum")
-		print(request_symbol_list[symbol_counter] + " has had an increasing price and significant increase in volume of trade.")
-		print("Therefore, this currency has upward momentum and the user should buy.")
-	else:
-		print("You should not buy " + request_symbol_list[symbol_counter])
-		print(request_symbol_list[symbol_counter] + " did not fulfill the requirements to have upward momentum")
 
-	symbol_counter = symbol_counter + 1
+	# if(price1 > price2 and price2 > price3):
+	# 	increasing_price = True
 
-	print("*******************************************")
-	print("*******************************************")
+
+	# if(increasing_volume == True and volume_percent_change_is_desired == True and increasing_price == True):
+	# 	print("You should buy! The conditions have been satisified!")
+	# 	print("This algorithm bases crypto currency buy choices off the concept of momentum")
+	# 	print(request_symbol_list[symbol_counter] + " has had an increasing price and significant increase in volume of trade.")
+	# 	print("Therefore, this currency has upward momentum and the user should buy.")
+	# else:
+	# 	print("You should not buy " + request_symbol_list[symbol_counter])
+	# 	print(request_symbol_list[symbol_counter] + " did not fulfill the requirements to have upward momentum")
+
+	# symbol_counter = symbol_counter + 1
+
+	# print("*******************************************")
+	# print("*******************************************")
 
 
 
