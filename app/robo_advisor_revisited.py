@@ -40,6 +40,7 @@ def get_response(request_url):
 	return parsed_response
 
 
+
 def transform_response(list_keys, parsed):
 
 	response_list = []
@@ -50,23 +51,9 @@ def transform_response(list_keys, parsed):
 	volume_list =[]
 	market_cap_list = []
 	date_list = []
-
-
-	# response_dataframe = pd.DataFrame(columns = ['latest_open','latest_high', 'latest_low', 'latest_close', 'latest_volume', 'latest_market_cap'])
-
-	# for dates in list_keys:
-	# 	item = parsed["Time Series (Digital Currency Daily)"][dates]["1a. open (USD)"]
-	# 	item = dollar_format(float(item))
-	# 	response_dataframe['latest_open'].append(item)
-
-	# print("response dataframe")
-	# print(response_dataframe)
 	
 	counter = 0
 
-
-
-	
 	for index,dates in enumerate(list_keys):
 
 		if(index==100):
@@ -100,10 +87,6 @@ def transform_response(list_keys, parsed):
 			market_cap_list.append(latest_market_cap)
 
 			date_list.append(dates)
-
-
-
-
 
 
 	response_dataframe = pd.DataFrame(data = {'open': latest_open_list, 
