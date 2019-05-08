@@ -162,11 +162,12 @@ for parsed in parsed_response_list:
 
 
 
-write_to_csv(data_response_dict,request_symbol_list)
+filename = write_to_csv(data_response_dict,request_symbol_list)
 
 
 symbol_counter = 0
 
+pprint.pprint(data_response_dict)
 
 
 iterator = 1

@@ -140,7 +140,7 @@ def write_to_csv(response_dict, request_symbol_list):
 			counter = counter + 1
 			symbol_counter = symbol_counter + 1
 
-	return True
+	return filename
 
 
 
