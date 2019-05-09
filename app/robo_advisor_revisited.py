@@ -110,7 +110,7 @@ def write_to_csv(response_dict, request_symbol_list):
 	
 	datestring = datetime.datetime.now().today().strftime(' %m %d %y  ')
 	datestring1 = datetime.datetime.now().time().strftime('%H %M %S')
-	filename = 'data/prices' + datestring + datestring1 + '.csv'
+	filename = getcwd() + '/data/prices' + datestring + datestring1 + '.csv'
 
 	#https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/notes/python/modules/csv.md
 	with open(filename, 'w') as csv_file:

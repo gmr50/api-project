@@ -26,7 +26,7 @@ API_KEY = os.environ.get("API_KEY")
 colnames = ['code', 'name']
 
 try:	
-	filename = "digital_currency_list.csv"
+	filename = os.getcwd() + "/digital_currency_list.csv"
 	data = pd.read_csv(filename,names=colnames)
 except:
 	sys.exit("The digital_currency_list.csv file is not in the same directory as this script. Please download from https://www.alphavantage.co/digital_currency_list/ and try again.")
