@@ -1,5 +1,0 @@
-pandas
-datetime
-requests
-pytest
-python-dotenv
