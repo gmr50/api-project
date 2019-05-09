@@ -186,7 +186,8 @@ def test_write_to_csv():
 
 
 	filename = write_to_csv(test_dict,request_symbol_list)
-	filename = (os.getcwd()) + '/' +filename
+	filename = (os.getcwd()) + '/' + filename
+	
 
 	with open(filename) as csv_file:
 		csv_reader = csv.reader(csv_file, delimiter=',')
