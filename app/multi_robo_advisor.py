@@ -7,7 +7,7 @@ import datetime
 import pandas as pd 
 import sys
 import csv
-import pprint
+
 
 from robo_advisor_revisited import dollar_format, compile_url, get_response, transform_response, write_to_csv
 
@@ -19,7 +19,7 @@ load_dotenv()
 API_KEY = os.environ.get("API_KEY")
 
 
-#print(API_KEY)
+
 
 
 #https://stackoverflow.com/questions/19486369/extract-csv-file-specific-columns-to-list-in-python
@@ -75,7 +75,7 @@ while counter < 3:
 
 			#revisited
 			request_url = compile_url(request_symbol,API_KEY)
-			print(request_url)
+			
 			#revisited
 			parsed_response = get_response(request_url)
 
@@ -167,7 +167,6 @@ filename = write_to_csv(data_response_dict,request_symbol_list)
 
 symbol_counter = 0
 
-pprint.pprint(data_response_dict)
 
 
 iterator = 1
